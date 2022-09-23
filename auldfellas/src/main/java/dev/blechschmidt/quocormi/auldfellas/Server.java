@@ -12,8 +12,15 @@ public class Server {
         QuotationService afqService = new AFQService();
 
         try {
-            // Connect to the RMI Registry - creating the registry will be the responsibility of the broker
-            Registry registry = LocateRegistry.createRegistry(1099);
+            // Create / connect to the registry
+            Registry registry = null;
+            if (args.length == 0) {
+                System.out.println("Hosting registry on port 1099");
+                registry = LocateRegistry.createRegistry(1099);
+            } else {
+                System.out.println("Connecting to registry @ '" + args[0] + ":1099'");
+                registry = LocateRegistry.getRegistry(args[0], 1099);
+            }
 
             // Create the Remote Object
             QuotationService quotationService = (QuotationService) UnicastRemoteObject.exportObject(afqService, 0);
@@ -21,7 +28,7 @@ public class Server {
             // Register the object with the RMI Registry
             registry.bind(Constants.AULD_FELLAS_SERVICE, quotationService);
 
-            System.out.println("AFQService registered to registry on port 1099");
+            System.out.println("AFQService registered");
 
             while (true) {
                 Thread.sleep(Integer.MAX_VALUE);
