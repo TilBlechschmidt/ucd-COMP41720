@@ -2,9 +2,10 @@ import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
-import core.Constants;
-import core.QuotationService;
-import auldfellas.AFQService;
+import dev.blechschmidt.quocormi.core.Constants;
+import dev.blechschmidt.quocormi.core.QuotationService;
+import dev.blechschmidt.quocormi.core.ClientInfo;
+import dev.blechschmidt.quocormi.auldfellas.AFQService;
 
 import org.junit.*;
 
@@ -30,5 +31,12 @@ public class AuldfellasUnitTest {
     public void connectionTest() throws Exception {
         QuotationService service = (QuotationService) registry.lookup(Constants.AULD_FELLAS_SERVICE);
         assertNotNull(service);
+    }
+
+    @Test
+    public void generateQuotationTest() throws Exception {
+        QuotationService service = (QuotationService) registry.lookup(Constants.AULD_FELLAS_SERVICE);
+        ClientInfo info = new ClientInfo("John", ClientInfo.MALE, 42, 1337, 69, "RZ-TB-363");
+        service.generateQuotation(info);
     }
 }

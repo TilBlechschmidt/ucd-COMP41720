@@ -1,4 +1,4 @@
-package core;
+package dev.blechschmidt.quocormi.core;
 
 import java.util.List;
 import java.rmi.Remote;

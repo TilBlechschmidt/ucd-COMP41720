@@ -1,3 +1,5 @@
+package dev.blechschmidt.quocormi.core;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 

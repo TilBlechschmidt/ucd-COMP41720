@@ -1,7 +1,9 @@
-import core.AbstractQuotationService;
-import core.ClientInfo;
-import core.Quotation;
-import core.QuotationService;
+package dev.blechschmidt.quocormi.auldfellas;
+
+import dev.blechschmidt.quocormi.core.AbstractQuotationService;
+import dev.blechschmidt.quocormi.core.ClientInfo;
+import dev.blechschmidt.quocormi.core.Quotation;
+import dev.blechschmidt.quocormi.core.QuotationService;
 
 /**
  * Implementation of the AuldFellas insurance quotation service.

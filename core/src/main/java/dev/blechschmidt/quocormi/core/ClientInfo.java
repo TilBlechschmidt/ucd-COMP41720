@@ -1,4 +1,4 @@
-package core;
+package dev.blechschmidt.quocormi.core;
 
 /**
  * Interface to define the state to be stored in ClientInfo objects
