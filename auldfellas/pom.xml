@@ -13,18 +13,13 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>labs</groupId>
+            <artifactId>core</artifactId>
+            <version>0.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <configuration>
-                    <mainClass>Main</mainClass>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
 </project>
