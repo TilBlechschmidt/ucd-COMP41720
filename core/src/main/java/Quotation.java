@@ -1,5 +1,3 @@
-package core;
-
 /**
  * Class to store the quotations returned by the quotation services
  * 

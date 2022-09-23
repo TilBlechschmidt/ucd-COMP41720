@@ -1,5 +1,3 @@
-package auldfellas;
-
 import core.AbstractQuotationService;
 import core.ClientInfo;
 import core.Quotation;

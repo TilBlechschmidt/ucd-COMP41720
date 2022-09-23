@@ -1,5 +1,3 @@
-package core;
-
 public interface Constants {
 	public static final String BROKER_SERVICE = "bs-BrokerService";  
 	public static final String GIRL_POWER_SERVICE = "qs-GirlPowerService";  
