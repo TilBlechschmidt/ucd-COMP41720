@@ -1,4 +1,4 @@
-package service.core;
+package core;
 
 public interface Constants {
 	public static final String BROKER_SERVICE = "bs-BrokerService";  

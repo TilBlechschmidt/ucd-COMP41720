@@ -1,14 +1,14 @@
-package service.core;
+package core;
 
 import java.util.List;
-
-import service.registry.Service;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 /**
  * Interface for defining the behaviours of the broker service
  * @author Rem
  *
  */
-public interface BrokerService extends Service {
-	public List<Quotation> getQuotations(ClientInfo info);
+public interface BrokerService extends Remote {
+	public List<Quotation> getQuotations(ClientInfo info) throws RemoteException;
 }

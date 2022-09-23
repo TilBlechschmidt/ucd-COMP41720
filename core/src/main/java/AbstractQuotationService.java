@@ -1,4 +1,4 @@
-package service.core;
+package core;
 
 import java.util.Random;
 
