@@ -23,7 +23,7 @@ public class AuldfellasUnitTest {
             QuotationService quotationService = (QuotationService) UnicastRemoteObject.exportObject(afqService,0);
             registry.bind(Constants.AULD_FELLAS_SERVICE, quotationService); 
         } catch (Exception e) {
-            System.out.println("Trouble: " + e);
+            e.printStackTrace();
         }
     }
 
