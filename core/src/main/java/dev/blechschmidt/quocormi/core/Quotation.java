@@ -1,12 +1,14 @@
 package dev.blechschmidt.quocormi.core;
 
+import java.io.Serializable;
+
 /**
  * Class to store the quotations returned by the quotation services
  * 
  * @author Rem
  *
  */
-public class Quotation {
+public class Quotation implements Serializable {
 	public Quotation(String company, String reference, double price) {
 		this.company = company;
 		this.reference = reference;
