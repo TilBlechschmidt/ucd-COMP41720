@@ -7,7 +7,7 @@ and returns a culminated overview of all the available quotations. There is also
 
 There are three quotation services and a broker which queries them. The broker is in turn invoked by the client. All modules communicate through the Java Remote Invocation (`java.rmi`) interface and any module except for the client can both bind to or host a registry (see usage information below).
 
-TODO INSERT ARCH OVERVIEW PICTURE
+![Architecture overview](./architecture.jpeg)
 
 ## Usage
 
