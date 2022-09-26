@@ -1,32 +1,20 @@
 package dev.blechschmidt.quocormi.girlpower;
 
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
-
 import dev.blechschmidt.quocormi.core.Constants;
-import dev.blechschmidt.quocormi.core.QuotationService;
+import dev.blechschmidt.quocormi.core.ServiceRegistration;
 
+/**
+ * Executable main class which hosts the GirlPower quotation service
+ * 
+ * @author Til Blechschmidt <til.blechschmidt@ucdconnect.ie>
+ *
+ */
 public class Server {
     public static void main(String[] args) {
-        QuotationService gpqService = new GPQService();
-
         try {
-            // Create / connect to the registry
-            Registry registry = null;
-            if (args.length == 0) {
-                System.out.println("Hosting registry on port 1099");
-                registry = LocateRegistry.createRegistry(1099);
-            } else {
-                System.out.println("Connecting to registry @ '" + args[0] + ":1099'");
-                registry = LocateRegistry.getRegistry(args[0], 1099);
-            }
-
-            // Create the Remote Object
-            QuotationService quotationService = (QuotationService) UnicastRemoteObject.exportObject(gpqService, 0);
-
-            // Register the object with the RMI Registry
-            registry.bind(Constants.GIRL_POWER_SERVICE, quotationService);
+            ServiceRegistration registration = new ServiceRegistration(Constants.GIRL_POWER_SERVICE, new GPQService(),
+                    args);
+            registration.register();
 
             System.out.println("GPQService registered");
 
