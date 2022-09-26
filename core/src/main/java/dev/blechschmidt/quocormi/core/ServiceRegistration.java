@@ -24,6 +24,10 @@ import java.rmi.server.UnicastRemoteObject;
 public class ServiceRegistration {
     public static final int REGISTRY_PORT = 1099;
 
+    // Prevent the registry service from deallocating in case we are hosting a
+    // registry, otherwise it is null.
+    private static UnauthenticatedRegistryService registryService;
+
     String name;
     Remote remote;
 
@@ -123,8 +127,9 @@ public class ServiceRegistration {
 
             // Bind the RegistryService so remote instances of the ServiceRegistration can
             // actually register services
+            registryService = new UnauthenticatedRegistryService(registry);
             registry.bind(Constants.REGISTRY_SERVICE,
-                    UnicastRemoteObject.exportObject(new UnauthenticatedRegistryService(registry), 0));
+                    UnicastRemoteObject.exportObject(registryService, 0));
 
             return registry;
         }
