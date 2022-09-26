@@ -1,0 +1,71 @@
+# Compose file with services for each module
+#
+# It automatically builds the images from the sources, though it WILL NOT rebuild them by default.
+# You have to run docker compose with the --build flag in order for it to rebuild after changes.
+# 
+# Additionally, all services have been placed in the host network to make it easier to reason about.
+# 
+# NOTE: There is a potential race condition which you may encounter if you have a very fast computer.
+#       Even though the services have a logical depends_on relationship, it only waits for the container
+#       to start but not for the registry to be hosted (in case of the broker) or services to be registered
+#       (in case of the quotation services). This means that if the containers start up very fast but the JVM
+#       needs a while to actually execute the code, it will not work. The "easy" workaround if you encounter this
+#       is to start the services individually in the following order:
+#
+#         1. broker
+#         2. auldfellas, dodgydrivers, girlpower
+#         3. client
+#
+#       For brevity, an actual fix for the race condition (by waiting for a time period or the registry/services to actually exist) has not been implemented.
+
+version: '3'
+services:
+  broker:
+    image: quoco-rmi-broker
+    container_name: quoco-rmi-broker
+    build:
+      args:
+        MODULE: broker
+
+  auldfellas:
+    image: quoco-rmi-auldfellas
+    build:
+      args:
+        MODULE: auldfellas
+    depends_on:
+      - broker
+    environment:
+      - REGISTRY=quoco-rmi-broker
+
+  dodgydrivers:
+    image: quoco-rmi-dodgydrivers
+    build:
+      args:
+        MODULE: dodgydrivers
+    depends_on:
+      - broker
+    environment:
+      - REGISTRY=quoco-rmi-broker
+
+  girlpower:
+    image: quoco-rmi-girlpower
+    build:
+      args:
+        MODULE: girlpower
+    depends_on:
+      - broker
+    environment:
+      - REGISTRY=quoco-rmi-broker
+
+  client:
+    image: quoco-rmi-client
+    build:
+      args:
+        MODULE: client
+    depends_on:
+      - broker
+      - auldfellas
+      - dodgydrivers
+      - girlpower
+    environment:
+      - REGISTRY=quoco-rmi-broker
