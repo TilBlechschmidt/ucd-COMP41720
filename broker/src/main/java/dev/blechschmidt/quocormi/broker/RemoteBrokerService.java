@@ -26,10 +26,10 @@ public class RemoteBrokerService implements BrokerService {
     public List<Quotation> getQuotations(ClientInfo info) throws RemoteException {
         List<Quotation> quotations = new LinkedList<Quotation>();
 
-        for (String name : this.registry.list()) {
+        for (String name : registry.list()) {
             if (name.startsWith("qs-")) {
                 try {
-                    QuotationService service = (QuotationService) this.registry.lookup(name);
+                    QuotationService service = (QuotationService) registry.lookup(name);
                     quotations.add(service.generateQuotation(info));
                 } catch (Exception e) {
                     // We do not want the client to ever encounter an error, so instead we print the
