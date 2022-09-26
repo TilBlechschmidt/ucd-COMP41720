@@ -1,17 +1,17 @@
-# QuoCo | Your friendly neighbourhood quotation provider
+# QuoCo | Your friendly neighbourhood quote provider
 
-This repository contains a [quotation broker](./broker/) which will query [multiple](./auldfellas/) [quotation](./dodgydrivers/) [providers](./girlpower/)
-and returns a culminated overview of all the available quotations. There is also a [client](./client/) available which requests and displays said quotations in a tabular view.
+This repository contains a [quote broker](./broker/) which will query [multiple](./auldfellas/) [quote](./dodgydrivers/) [providers](./girlpower/)
+and returns a culminated overview of all the available quotes. There is also a [client](./client/) available which requests and displays said quotes in a tabular view.
 
 ## Architecture overview
 
-There are three quotation services and a broker which queries them. The broker is in turn invoked by the client. All modules communicate through the Java Remote Invocation (`java.rmi`) interface and any module except for the client can both bind to or host a registry (see usage information below).
+There are three quoting services and a broker which queries them. The broker is in turn invoked by the client. All modules communicate through the Java Remote Invocation (`java.rmi`) interface and any module except for the client can both bind to or host a registry (see usage information below).
 
 ![Architecture overview](./architecture.jpeg)
 
 ## Usage
 
-There are multiple different ways in which you run the quotation service, detailed below ranking from simplest to hardest.
+There are multiple different ways in which you run the quoting service, detailed below ranking from simplest to hardest.
 
 ### Docker Compose
 
@@ -21,7 +21,7 @@ If you have a reasonably recent version of Docker installed, you can start all t
 docker compose up --build
 ```
 
-Note that there is a potential race condition which may result in the client starting before all the quotation services are connected. For more details on the problem and how to resolve it, see the [docker-compose.yml](./docker-compose.yml).
+Note that there is a potential race condition which may result in the client starting before all the quoting services are connected. For more details on the problem and how to resolve it, see the [docker-compose.yml](./docker-compose.yml).
 
 ### Docker
 
@@ -54,7 +54,7 @@ mvn clean install package
 # 2. Launch the broker
 mvn exec:java -pl broker
 
-# 3. Connect the quotation services (in different terminals)
+# 3. Connect the quoting services (in different terminals)
 REGISTRY=localhost mvn exec:java -pl auldfellas
 REGISTRY=localhost mvn exec:java -pl dodgydrivers
 REGISTRY=localhost mvn exec:java -pl girlpower
@@ -65,4 +65,4 @@ REGISTRY=localhost mvn exec:java -pl client
 
 ## Service degradation
 
-When a quotation service is registered but does not reply or is "gone", the broker service will print an error and fall back to just returning the quotations that are available.
+When a quoting service is registered but does not reply or is "gone", the broker service will print an error and fall back to just returning the quotes that are available.
