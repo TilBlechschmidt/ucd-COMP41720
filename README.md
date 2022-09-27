@@ -66,3 +66,8 @@ REGISTRY=localhost mvn exec:java -pl client
 ## Service degradation
 
 When a quoting service is registered but does not reply or is "gone", the broker service will print an error and fall back to just returning the quotes that are available.
+
+## Known Issues
+
+Once a service has been connected it is not possible to re-register the same service (i.e. after restarting it). While there are ways to add shutdown hooks into the JVM that trigger on e.g. a SIGINT, this has been omitted to keep complexity down. It is also possible to use `rebind` instead of `bind` but this would potentially overwrite a running service and would need additional edge-case handling.
+ 
