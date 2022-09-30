@@ -8,14 +8,14 @@
     <packaging>jar</packaging>
 
     <properties>
-        <main.class>dev.blechschmidt.quocormi.auldfellas.Server</main.class>
+        <main.class>dev.blechschmidt.quocows.Quoter</main.class>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>labs</groupId>
+            <groupId>lab3</groupId>
             <artifactId>core</artifactId>
             <version>0.0.1</version>
         </dependency>

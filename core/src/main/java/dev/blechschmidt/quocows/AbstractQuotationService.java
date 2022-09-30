@@ -1,4 +1,4 @@
-package dev.blechschmidt.quocows.core;
+package dev.blechschmidt.quocows;
 
 import java.util.Random;
 

@@ -1,4 +1,4 @@
-package dev.blechschmidt.quocows.core;
+package dev.blechschmidt.quocows;
 
 /**
  * Class to store the quotations returned by the quotation services
