@@ -18,7 +18,7 @@ import dev.blechschmidt.quocows.Quotation;
  */
 @WebService
 @SOAPBinding(style = Style.RPC, use = Use.LITERAL)
-public class Quoter extends AbstractQuotationService {
+public class Quoter extends AbstractQuotationService implements QuoterService {
 	// All references are to be prefixed with an AF (e.g. AF001000)
 	public static final String PREFIX = "AF";
 	public static final String COMPANY = "Auld Fellas Ltd.";
