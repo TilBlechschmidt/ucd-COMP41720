@@ -6,26 +6,25 @@ import java.text.NumberFormat;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
+import dev.blechschmidt.quocows.BrokerService;
 import dev.blechschmidt.quocows.ClientInfo;
 import dev.blechschmidt.quocows.Quotation;
-import dev.blechschmidt.quocows.QuoterService;
 
 public class Main {
     public static void main(String[] args) {
         try {
             String host = "localhost";
-            int port = 9001;
-            // More Advanced flag-based configuration
-            // [ copy this from the ws-quote example client ]
-            URL wsdlUrl = new URL("http://" + host + ":" + port + "/quotation?wsdl");
-            QName serviceName = new QName("http://quocows.blechschmidt.dev/", "QuoterService");
+            int port = 9000;
+
+            URL wsdlUrl = new URL("http://" + host + ":" + port + "/quotations?wsdl");
+            QName serviceName = new QName("http://quocows.blechschmidt.dev/", "BrokerService");
             Service service = Service.create(wsdlUrl, serviceName);
-            QName portName = new QName("http://quocows.blechschmidt.dev/", "QuoterPort");
-            QuoterService quotationService = service.getPort(portName, QuoterService.class);
+            QName portName = new QName("http://quocows.blechschmidt.dev/", "BrokerPort");
+            BrokerService quotationService = service.getPort(portName, BrokerService.class);
+
             for (ClientInfo info : clients) {
                 displayProfile(info);
-                Quotation quotation = quotationService.generateQuotation(info);
-                displayQuotation(quotation);
+                quotationService.getQuotations(info).forEach(Main::displayQuotation);
                 System.out.println("\n");
             }
         } catch (Exception e) {

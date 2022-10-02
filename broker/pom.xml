@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <main.class>dev.blechschmidt.quocormi.broker.Server</main.class>
+        <main.class>dev.blechschmidt.quocows.Broker</main.class>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
