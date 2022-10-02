@@ -12,11 +12,17 @@ import dev.blechschmidt.quocows.Quotation;
 
 public class Main {
     public static void main(String[] args) {
-        try {
-            String host = "localhost";
-            int port = 9000;
+        String url = System.getenv("BROKER");
 
-            URL wsdlUrl = new URL("http://" + host + ":" + port + "/quotations?wsdl");
+        if (args.length != 1 && url == null) {
+            System.err.println(
+                    "You need to provide a broker URL either as the first and only CLI arg or via the BROKER env variable.");
+        } else if (args.length == 1) {
+            url = args[0];
+        }
+
+        try {
+            URL wsdlUrl = new URL(url + "?wsdl");
             QName serviceName = new QName("http://quocows.blechschmidt.dev/", "BrokerService");
             Service service = Service.create(wsdlUrl, serviceName);
             QName portName = new QName("http://quocows.blechschmidt.dev/", "BrokerPort");
