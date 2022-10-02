@@ -6,6 +6,7 @@ import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.*;
 import javax.xml.ws.Endpoint;
 
+import dev.blechschmidt.quocows.QuotationServiceAnnouncer;
 import dev.blechschmidt.quocows.AbstractQuotationService;
 import dev.blechschmidt.quocows.ClientInfo;
 import dev.blechschmidt.quocows.Quotation;
@@ -23,8 +24,11 @@ public class Quoter extends AbstractQuotationService implements QuoterService {
 	public static final String PREFIX = "AF";
 	public static final String COMPANY = "Auld Fellas Ltd.";
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		Endpoint.publish("http://0.0.0.0:9001/quotation", new Quoter());
+
+		QuotationServiceAnnouncer announcer = new QuotationServiceAnnouncer();
+		announcer.register("auldfellas", 9001, "path=quotation");
 	}
 
 	/**

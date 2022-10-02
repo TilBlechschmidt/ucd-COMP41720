@@ -1,5 +1,8 @@
 package dev.blechschmidt.quocows;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
+
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
@@ -23,8 +26,11 @@ public class Quoter extends AbstractQuotationService implements QuoterService {
     public static final String PREFIX = "DD";
     public static final String COMPANY = "Dodgy Drivers Corp.";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnknownHostException, IOException {
         Endpoint.publish("http://0.0.0.0:9003/quotation", new Quoter());
+
+        QuotationServiceAnnouncer announcer = new QuotationServiceAnnouncer();
+        announcer.register("dodgydrivers", 9003, "path=quotation");
     }
 
     /**

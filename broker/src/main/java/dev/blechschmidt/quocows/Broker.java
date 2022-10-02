@@ -1,7 +1,6 @@
 package dev.blechschmidt.quocows;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.jws.WebMethod;
@@ -10,11 +9,8 @@ import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.*;
 import javax.xml.ws.Endpoint;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import javax.xml.namespace.QName;
-import javax.xml.ws.Service;
+import java.io.IOException;
+import java.net.UnknownHostException;
 
 /**
  * Implementation of the broker service that uses the Service Registry.
@@ -25,33 +21,21 @@ import javax.xml.ws.Service;
 @WebService
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL)
 public class Broker {
-	List<QuoterService> services;
+	QuotationServiceAnnouncer announcer;
 
-	public static void main(String[] args) throws MalformedURLException {
-		Endpoint.publish("http://0.0.0.0:9000/quotations", new Broker(args));
+	public static void main(String[] args) throws UnknownHostException, IOException {
+		Endpoint.publish("http://0.0.0.0:9000/quotations", new Broker());
 	}
 
-	public Broker(List<QuoterService> services) {
-		this.services = services;
-	}
-
-	public Broker(String[] urls) throws MalformedURLException {
-		List<QuoterService> services = new LinkedList<>();
-
-		for (String url : urls) {
-			URL wsdlUrl = new URL(url + "?wsdl");
-			QName serviceName = new QName("http://quocows.blechschmidt.dev/", "QuoterService");
-			Service service = Service.create(wsdlUrl, serviceName);
-			QName portName = new QName("http://quocows.blechschmidt.dev/", "QuoterPort");
-			QuoterService quotationService = service.getPort(portName, QuoterService.class);
-			services.add(quotationService);
-		}
-
-		this.services = services;
+	public Broker() throws UnknownHostException, IOException {
+		this.announcer = new QuotationServiceAnnouncer();
+		this.announcer.startDiscovery();
 	}
 
 	@WebMethod
 	public LinkedList<Quotation> getQuotations(ClientInfo info) {
-		return services.stream().map(s -> s.generateQuotation(info)).collect(Collectors.toCollection(LinkedList::new));
+		// TODO Handle potential runtime exceptions (like ECONNREFUSED)
+		return announcer.getDiscoveredServices().stream().map(s -> s.generateQuotation(info))
+				.collect(Collectors.toCollection(LinkedList::new));
 	}
 }
