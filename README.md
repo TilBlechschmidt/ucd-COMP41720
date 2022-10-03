@@ -65,4 +65,4 @@ BROKER=http://localhost:9000/quotations mvn exec:java -pl client
 
 ## Service degradation
 
-When a quoting service is registered but does not reply or is "gone", the broker service will print an error and fall back to just returning the quotes that are available.
+When a quoting service is registered but does not reply or is "gone", the broker service will print an error and fall back to just returning the quotes that are available. Do note however, that the default per-service timeout [is set to 60 seconds](https://cxf.apache.org/docs/client-http-transport-including-ssl-support.html#ClientHTTPTransport(includingSSLsupport)-Theclientelement) and thus depending on the number of unresponsive services it may take a while for the response to come through in a degraded setup.
