@@ -1,6 +1,7 @@
 package dev.blechschmidt.quocows;
 
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.jws.WebMethod;
@@ -34,8 +35,22 @@ public class Broker {
 
 	@WebMethod
 	public LinkedList<Quotation> getQuotations(ClientInfo info) {
-		// TODO Handle potential runtime exceptions (like ECONNREFUSED)
-		return announcer.getDiscoveredServices().stream().map(s -> s.generateQuotation(info))
+		return announcer.getDiscoveredServices().stream()
+				.map(s -> {
+					try {
+						return s.generateQuotation(info);
+					} catch (Exception e) {
+						// We do not want the client to ever encounter an error, so instead we print the
+						// error and softly fall back to just returning the quotations that we can get.
+						//
+						// It should be noted that unresponsive services might block for a while before
+						// returning errors, thus increasing response time.
+						new Exception("Failed to query quotation service", e).printStackTrace();
+
+						return null;
+					}
+				})
+				.filter(Objects::nonNull)
 				.collect(Collectors.toCollection(LinkedList::new));
 	}
 }
