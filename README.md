@@ -36,11 +36,11 @@ docker network create quoco-ws
 
 # Run these commands in separate terminals
 docker run --rm -it --network quoco-ws --name broker quoco-ws-broker
-docker run --rm -it --network quoco-ws -e REGISTRY=broker quoco-ws-auldfellas
-docker run --rm -it --network quoco-ws -e REGISTRY=broker quoco-ws-dodgydrivers
-docker run --rm -it --network quoco-ws -e REGISTRY=broker quoco-ws-girlpower
+docker run --rm -it --network quoco-ws quoco-ws-auldfellas
+docker run --rm -it --network quoco-ws quoco-ws-dodgydrivers
+docker run --rm -it --network quoco-ws quoco-ws-girlpower
 
-docker run --rm -it --network quoco-ws -e REGISTRY=broker quoco-ws-client
+docker run --rm -it --network quoco-ws -e BROKER=http://broker:9000/quotations quoco-ws-client
 ```
 
 ### Maven
