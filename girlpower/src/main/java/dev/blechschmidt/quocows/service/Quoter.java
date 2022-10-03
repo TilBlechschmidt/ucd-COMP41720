@@ -1,4 +1,4 @@
-package dev.blechschmidt.quocows;
+package dev.blechschmidt.quocows.service;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -8,10 +8,6 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.*;
 import javax.xml.ws.Endpoint;
-
-import dev.blechschmidt.quocows.AbstractQuotationService;
-import dev.blechschmidt.quocows.ClientInfo;
-import dev.blechschmidt.quocows.Quotation;
 
 /**
  * Implementation of the Girl Power insurance quotation service.
@@ -27,10 +23,10 @@ public class Quoter extends AbstractQuotationService implements QuoterService {
     public static final String COMPANY = "Girl Power Inc.";
 
     public static void main(String[] args) throws UnknownHostException, IOException {
-		String envport = System.getenv("QUOTER_PORT");
-		int port = args.length == 1 ? Integer.parseInt(args[0]) : (envport != null ? Integer.parseInt(envport) : 9000);
+        String envport = System.getenv("QUOTER_PORT");
+        int port = args.length == 1 ? Integer.parseInt(args[0]) : (envport != null ? Integer.parseInt(envport) : 9000);
 
-		Endpoint.publish("http://0.0.0.0:" + port + "/quotation", new Quoter());
+        Endpoint.publish("http://0.0.0.0:" + port + "/quotation", new Quoter());
 
         QuotationServiceAnnouncer announcer = new QuotationServiceAnnouncer();
         announcer.register("girlpower", port, "path=quotation");

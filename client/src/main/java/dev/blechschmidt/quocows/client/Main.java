@@ -6,9 +6,9 @@ import java.text.NumberFormat;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
-import dev.blechschmidt.quocows.BrokerService;
-import dev.blechschmidt.quocows.ClientInfo;
-import dev.blechschmidt.quocows.Quotation;
+import dev.blechschmidt.quocows.service.BrokerService;
+import dev.blechschmidt.quocows.service.ClientInfo;
+import dev.blechschmidt.quocows.service.Quotation;
 
 public class Main {
     public static void main(String[] args) {
@@ -23,9 +23,9 @@ public class Main {
 
         try {
             URL wsdlUrl = new URL(url + "?wsdl");
-            QName serviceName = new QName("http://quocows.blechschmidt.dev/", "BrokerService");
+            QName serviceName = new QName("http://service.quocows.blechschmidt.dev/", "BrokerService");
             Service service = Service.create(wsdlUrl, serviceName);
-            QName portName = new QName("http://quocows.blechschmidt.dev/", "BrokerPort");
+            QName portName = new QName("http://service.quocows.blechschmidt.dev/", "BrokerPort");
             BrokerService quotationService = service.getPort(portName, BrokerService.class);
 
             for (ClientInfo info : clients) {

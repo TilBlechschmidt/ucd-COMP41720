@@ -1,4 +1,4 @@
-package dev.blechschmidt.quocows;
+package dev.blechschmidt.quocows.service;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -61,10 +61,10 @@ public class QuotationServiceAnnouncer {
             for (String url : urls) {
                 try {
                     URL wsdlUrl = new URL(url + "?wsdl");
-                    QName serviceName = new QName("http://quocows.blechschmidt.dev/",
+                    QName serviceName = new QName("http://service.quocows.blechschmidt.dev/",
                             "QuoterService");
                     Service service = Service.create(wsdlUrl, serviceName);
-                    QName portName = new QName("http://quocows.blechschmidt.dev/", "QuoterPort");
+                    QName portName = new QName("http://service.quocows.blechschmidt.dev/", "QuoterPort");
                     QuoterService quoterService = service.getPort(portName,
                             QuoterService.class);
                     services.put(event.getName(), quoterService);

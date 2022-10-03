@@ -1,4 +1,4 @@
-package dev.blechschmidt.quocows;
+package dev.blechschmidt.quocows.service;
 
 import java.util.LinkedList;
 import javax.jws.WebMethod;

@@ -1,4 +1,4 @@
-package dev.blechschmidt.quocows;
+package dev.blechschmidt.quocows.service;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;

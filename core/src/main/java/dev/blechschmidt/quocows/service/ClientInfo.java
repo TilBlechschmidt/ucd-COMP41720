@@ -1,4 +1,4 @@
-package dev.blechschmidt.quocows;
+package dev.blechschmidt.quocows.service;
 
 /**
  * Interface to define the state to be stored in ClientInfo objects

@@ -1,4 +1,4 @@
-package dev.blechschmidt.quocows;
+package dev.blechschmidt.quocows.service;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -8,10 +8,6 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.*;
 import javax.xml.ws.Endpoint;
-
-import dev.blechschmidt.quocows.AbstractQuotationService;
-import dev.blechschmidt.quocows.ClientInfo;
-import dev.blechschmidt.quocows.Quotation;
 
 /**
  * Implementation of Quotation Service for Dodgy Drivers Insurance Company.

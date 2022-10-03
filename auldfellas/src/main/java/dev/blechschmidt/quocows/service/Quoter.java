@@ -1,15 +1,10 @@
-package dev.blechschmidt.quocows;
+package dev.blechschmidt.quocows.service;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.*;
 import javax.xml.ws.Endpoint;
-
-import dev.blechschmidt.quocows.QuotationServiceAnnouncer;
-import dev.blechschmidt.quocows.AbstractQuotationService;
-import dev.blechschmidt.quocows.ClientInfo;
-import dev.blechschmidt.quocows.Quotation;
 
 /**
  * Implementation of the AuldFellas insurance quotation service.
