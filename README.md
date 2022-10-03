@@ -45,7 +45,7 @@ docker run --rm -it --network quoco-ws -e BROKER=http://broker:9000/quotations q
 
 ### Maven
 
-This method requires you to have Maven and Java 8 installed on your machine. The commands required are as follows:
+This method requires you to have Maven and Java 8 installed on your machine and the `JAVA_HOME` variable needs to point at it. The commands required are as follows:
 
 ```bash
 # 1. Build all the code
