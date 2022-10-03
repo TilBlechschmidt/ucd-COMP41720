@@ -16,7 +16,7 @@ import dev.blechschmidt.quocows.Quotation;
 /**
  * Implementation of Quotation Service for Dodgy Drivers Insurance Company.
  * 
- * @author Rem
+ * @author Rem, Til Blechschmidt <til.blechschmidt@ucdconnect.ie>
  *
  */
 @WebService
@@ -27,10 +27,13 @@ public class Quoter extends AbstractQuotationService implements QuoterService {
     public static final String COMPANY = "Dodgy Drivers Corp.";
 
     public static void main(String[] args) throws UnknownHostException, IOException {
-        Endpoint.publish("http://0.0.0.0:9003/quotation", new Quoter());
+        String envport = System.getenv("QUOTER_PORT");
+        int port = args.length == 1 ? Integer.parseInt(args[0]) : (envport != null ? Integer.parseInt(envport) : 9000);
+
+        Endpoint.publish("http://0.0.0.0:" + port + "/quotation", new Quoter());
 
         QuotationServiceAnnouncer announcer = new QuotationServiceAnnouncer();
-        announcer.register("dodgydrivers", 9003, "path=quotation");
+        announcer.register("dodgydrivers", port, "path=quotation");
     }
 
     /**

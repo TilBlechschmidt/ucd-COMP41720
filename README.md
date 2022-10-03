@@ -55,9 +55,9 @@ mvn clean install package
 mvn exec:java -pl broker
 
 # 3. Connect the quoting services (in different terminals)
-mvn exec:java -pl auldfellas
-mvn exec:java -pl dodgydrivers
-mvn exec:java -pl girlpower
+QUOTER_PORT=9001 mvn exec:java -pl auldfellas
+QUOTER_PORT=9002 mvn exec:java -pl dodgydrivers
+QUOTER_PORT=9003 mvn exec:java -pl girlpower
 
 # 4. Run the client (in yet another terminal)
 BROKER=http://localhost:9000/quotations mvn exec:java -pl client

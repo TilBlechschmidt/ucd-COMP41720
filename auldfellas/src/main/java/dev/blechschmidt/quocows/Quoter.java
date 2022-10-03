@@ -14,7 +14,7 @@ import dev.blechschmidt.quocows.Quotation;
 /**
  * Implementation of the AuldFellas insurance quotation service.
  * 
- * @author Rem
+ * @author Rem, Til Blechschmidt <til.blechschmidt@ucdconnect.ie>
  *
  */
 @WebService
@@ -25,10 +25,13 @@ public class Quoter extends AbstractQuotationService implements QuoterService {
 	public static final String COMPANY = "Auld Fellas Ltd.";
 
 	public static void main(String[] args) throws Exception {
-		Endpoint.publish("http://0.0.0.0:9001/quotation", new Quoter());
+		String envport = System.getenv("QUOTER_PORT");
+		int port = args.length == 1 ? Integer.parseInt(args[0]) : (envport != null ? Integer.parseInt(envport) : 9000);
+
+		Endpoint.publish("http://0.0.0.0:" + port + "/quotation", new Quoter());
 
 		QuotationServiceAnnouncer announcer = new QuotationServiceAnnouncer();
-		announcer.register("auldfellas", 9001, "path=quotation");
+		announcer.register("auldfellas", port, "path=quotation");
 	}
 
 	/**
