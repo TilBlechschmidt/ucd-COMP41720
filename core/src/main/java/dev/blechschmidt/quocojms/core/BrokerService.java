@@ -1,4 +1,4 @@
-package dev.blechschmidt.quocomom.core;
+package dev.blechschmidt.quocojms.core;
 
 import java.util.List;
 

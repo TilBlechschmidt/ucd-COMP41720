@@ -1,4 +1,4 @@
-package dev.blechschmidt.quocomom.core;
+package dev.blechschmidt.quocojms.core;
 
 public interface Constants {
 	public static final String BROKER_SERVICE = "bs-BrokerService";  

@@ -1,4 +1,4 @@
-package dev.blechschmidt.quocomom.core;
+package dev.blechschmidt.quocojms.core;
 
 /**
  * Interface to define the behaviour of a quotation service.

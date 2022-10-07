@@ -8,16 +8,21 @@
     <packaging>jar</packaging>
 
     <properties>
-        <main.class>dev.blechschmidt.quocows.service.Quoter</main.class>
+        <main.class>dev.blechschmidt.quocojms.Receiver</main.class>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>lab3</groupId>
+            <groupId>lab4</groupId>
             <artifactId>core</artifactId>
             <version>0.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+            <version>5.15.10</version>
         </dependency>
     </dependencies>
 

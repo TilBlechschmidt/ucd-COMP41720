@@ -15,7 +15,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>lab3</groupId>
+            <groupId>lab4</groupId>
             <artifactId>core</artifactId>
             <version>0.0.1</version>
         </dependency>
