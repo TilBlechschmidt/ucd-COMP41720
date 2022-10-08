@@ -1,7 +1,6 @@
-package dev.blechschmidt.quocojms;
+package dev.blechschmidt.quocojms.core;
 
 import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
@@ -15,25 +14,44 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 
 import dev.blechschmidt.quocojms.message.QuotationRequestMessage;
 import dev.blechschmidt.quocojms.message.QuotationResponseMessage;
-import dev.blechschmidt.quocojms.core.Quotation;
 
-public class Receiver {
-    private static final AFQService service = new AFQService();
+public class Quoter {
+    QuotationService service;
 
-    public static void main(String[] args) throws JMSException {
-        // TODO Take in authority for activemq server
-        String url = "failover://tcp://localhost:61616";
+    String id;
+    String url;
 
+    public Quoter(String[] args, QuotationService service) throws Exception {
+        String url = System.getenv("MQ");
+        String id = System.getenv("MQ");
+
+        // Prefer CLI args over environment variables
+        if (args.length == 2) {
+            id = args[0];
+            url = args[1];
+        }
+
+        // Require both url and ID to be set
+        if (url == null || id == null) {
+            throw new Exception(
+                    "Expected two CLI arguments (id, brokerUrl) or the environment variables (MQ, ID) to be set");
+        }
+
+        this.service = service;
+        this.url = url;
+        this.id = id;
+    }
+
+    public void run() throws JMSException {
         ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(url);
         factory.setTrustAllPackages(true);
 
         Connection connection = factory.createConnection();
-        connection.setClientID("auldfellas");
+        connection.setClientID(id);
         Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
 
-        // TODO Make these "global" constants
-        Queue queue = session.createQueue("QUOTATIONS");
-        Topic topic = session.createTopic("APPLICATIONS");
+        Queue queue = session.createQueue(Constants.CHANNEL_QUOTE);
+        Topic topic = session.createTopic(Constants.CHANNEL_APPLICATION);
         MessageConsumer consumer = session.createConsumer(topic);
         MessageProducer producer = session.createProducer(queue);
 

@@ -46,7 +46,5 @@ public class AFQService extends AbstractQuotationService {
 		if (info.points <= 6)
 			return 0;
 		return -50;
-
 	}
-
 }
