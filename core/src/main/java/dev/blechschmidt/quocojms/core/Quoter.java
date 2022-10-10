@@ -16,41 +16,23 @@ import dev.blechschmidt.quocojms.message.QuotationResponseMessage;
 
 public class Quoter {
     QuotationService service;
-
-    String id;
-    String url;
+    MessageBrokerSettings settings;
 
     public Quoter(String[] args, QuotationService service) throws Exception {
-        String url = System.getenv("MQ");
-        String id = System.getenv("ID");
-
-        // Prefer CLI args over environment variables
-        if (args.length == 2) {
-            id = args[0];
-            url = args[1];
-        }
-
-        // Require both url and ID to be set
-        if (url == null || id == null) {
-            throw new Exception(
-                    "Expected two CLI arguments (id, brokerUrl) or the environment variables (MQ, ID) to be set");
-        }
-
+        this.settings = new MessageBrokerSettings(args);
         this.service = service;
-        this.url = url;
-        this.id = id;
     }
 
     public void run() throws JMSException {
-        ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(url);
+        ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(settings.url);
         factory.setTrustAllPackages(true);
 
         Connection connection = factory.createConnection();
-        connection.setClientID(id);
+        connection.setClientID(settings.id);
         Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
 
-        Topic requests = session.createTopic("quoterRequestTopic");
-        Topic responses = session.createTopic("quoterResponseTopic");
+        Topic requests = session.createTopic(Constants.TOPIC_QUOTER_REQ);
+        Topic responses = session.createTopic(Constants.TOPIC_QUOTER_RES);
         MessageConsumer consumer = session.createConsumer(requests);
         MessageProducer producer = session.createProducer(responses);
 

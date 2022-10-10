@@ -20,6 +20,7 @@ services:
       args:
         MODULE: broker
     environment:
+      - ID=broker
       - MQ=failover://tcp://activemq:61616
 
   auldfellas:
@@ -28,6 +29,7 @@ services:
       args:
         MODULE: auldfellas
     environment:
+      - ID=auldfellas
       - MQ=failover://tcp://activemq:61616
 
   dodgydrivers:
@@ -36,6 +38,7 @@ services:
       args:
         MODULE: dodgydrivers
     environment:
+      - ID=dodgydrivers
       - MQ=failover://tcp://activemq:61616
 
   girlpower:
@@ -44,6 +47,7 @@ services:
       args:
         MODULE: girlpower
     environment:
+      - ID=girlpower
       - MQ=failover://tcp://activemq:61616
 
   client:
@@ -57,6 +61,7 @@ services:
       - dodgydrivers
       - girlpower
     entrypoint: "sh"
-    command: "-c 'sleep 10 && java -jar /main.jar'"
+    command: "-c 'sleep 30 && java -jar /main.jar'"
     environment:
+      - ID=client
       - MQ=failover://tcp://activemq:61616

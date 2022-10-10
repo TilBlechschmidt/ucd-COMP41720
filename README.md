@@ -5,7 +5,7 @@ and returns a culminated overview of all the available quotes. There is also a [
 
 ## Architecture overview
 
-There are three quoting services and a broker which queries them. The broker is in turn invoked by the client. The broker discovers quotation services through mDNS and looks for the `_quocows._tcp.local.` type. The client does not use mDNS and instead takes the broker URL directly as a CLI argument or via the `BROKER` environment variable.
+There are three quoting services and a broker which queries them. The broker is in turn invoked by the client. The components communicate via an MQ message broker (in this case ActiveMQ). In this particular case, the messages follow a request-response pattern — the requests for the quoter services are using a pub-sub model (to collect all quotes) while the requests for the broker are using a reliable queue (to balance the load).
 
 ![Architecture overview](./architecture.jpeg)
 
@@ -21,48 +21,53 @@ If you have a reasonably recent version of Docker installed, you can start all t
 docker compose up --build
 ```
 
-Note that there is a potential race condition which may result in the client starting before all the quoting services are connected. For more details on the problem and how to resolve it, see the [docker-compose.yml](./docker-compose.yml).
+Running the above command will start all the required components and will launch the client after 30 seconds (to give everything a chance to properly connect).
 
 ### Docker
 
 You can build and run the images manually using the following commands:
 
 ```bash
-# Builds all images with a `quoco-ws-` prefix
+# Builds all images with a `quoco-jms-` prefix
 ./build-images.sh
 
 # Create a network for the containers
-docker network create quoco-ws
+docker network create quoco-jms
+
+# Launch an ActiveMQ server
+docker run --rm --name=activemq -it -p 8161:8161 -p 61616:61616 --platform linux/amd64 rmohr/activemq:latest
 
 # Run these commands in separate terminals
-docker run --rm -it --network quoco-ws --name broker quoco-ws-broker
-docker run --rm -it --network quoco-ws quoco-ws-auldfellas
-docker run --rm -it --network quoco-ws quoco-ws-dodgydrivers
-docker run --rm -it --network quoco-ws quoco-ws-girlpower
+docker run --rm -it --network quoco-jms -e MQ=failover://tcp://localhost:61616 -e ID=broker quoco-jms-broker
+docker run --rm -it --network quoco-jms -e MQ=failover://tcp://localhost:61616 -e ID=auldfellas quoco-jms-auldfellas
+docker run --rm -it --network quoco-jms -e MQ=failover://tcp://localhost:61616 -e ID=dodgydrivers quoco-jms-dodgydrivers
+docker run --rm -it --network quoco-jms -e MQ=failover://tcp://localhost:61616 -e ID=girlpower quoco-jms-girlpower
 
-docker run --rm -it --network quoco-ws -e BROKER=http://broker:9000/quotations quoco-ws-client
+docker run --rm -it --network quoco-jms -e MQ=failover://tcp://localhost:61616 -e ID=client quoco-jms-client
 ```
 
 ### Maven
 
-This method requires you to have Maven and Java 8 installed on your machine and the `JAVA_HOME` variable needs to point at it. The commands required are as follows:
+You need to have an ActiveMQ server running locally for this to work (for running it in docker, see the section above). The commands required are as follows:
 
 ```bash
+export MQ=failover://tcp://localhost:61616
+
 # 1. Build all the code
 mvn clean install package
 
 # 2. Launch the broker
-mvn exec:java -pl broker
+ID=broker mvn exec:java -pl broker
 
 # 3. Connect the quoting services (in different terminals)
-QUOTER_PORT=9001 mvn exec:java -pl auldfellas
-QUOTER_PORT=9002 mvn exec:java -pl dodgydrivers
-QUOTER_PORT=9003 mvn exec:java -pl girlpower
+ID=auldfellas mvn exec:java -pl auldfellas
+ID=dodgydrivers mvn exec:java -pl dodgydrivers
+ID=girlpower mvn exec:java -pl girlpower
 
 # 4. Run the client (in yet another terminal)
-BROKER=http://localhost:9000/quotations mvn exec:java -pl client
+ID=client mvn exec:java -pl client
 ```
 
 ## Service degradation
 
-When a quoting service is registered but does not reply or is "gone", the broker service will print an error and fall back to just returning the quotes that are available. Do note however, that the default per-service timeout [is set to 60 seconds](https://cxf.apache.org/docs/client-http-transport-including-ssl-support.html#ClientHTTPTransport(includingSSLsupport)-Theclientelement) and thus depending on the number of unresponsive services it may take a while for the response to come through in a degraded setup.
+The broker will return all quotes that arrived within a predetermined deadline, fixed to 1 second.

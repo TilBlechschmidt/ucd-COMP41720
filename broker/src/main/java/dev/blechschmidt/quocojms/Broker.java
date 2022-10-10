@@ -19,6 +19,8 @@ import javax.jms.Topic;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
+import dev.blechschmidt.quocojms.core.Constants;
+import dev.blechschmidt.quocojms.core.MessageBrokerSettings;
 import dev.blechschmidt.quocojms.core.Quotation;
 import dev.blechschmidt.quocojms.message.QuotationRequestMessage;
 import dev.blechschmidt.quocojms.message.QuotationResponseMessage;
@@ -37,27 +39,23 @@ public class Broker {
     MessageConsumer clientRequestChannel;
 
     public static void main(String[] args) throws Exception {
-        Broker broker = new Broker();
-        broker.run();
+        new Broker(new MessageBrokerSettings(args)).run();
     }
 
-    public Broker() throws JMSException {
-        String url = "failover://tcp://localhost:61616";
-        String id = "broker";
-
+    public Broker(MessageBrokerSettings settings) throws JMSException {
         // Connect to the message broker
-        ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(url);
+        ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(settings.url);
         factory.setTrustAllPackages(true);
 
         Connection connection = factory.createConnection();
-        connection.setClientID(id);
+        connection.setClientID(settings.id);
         session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
 
         // Subscribe to the relevant topics/queues
-        Queue clientRequestQueue = session.createQueue("clientRequestQueue");
-        Topic clientResponseTopic = session.createTopic("clientResponseTopic");
-        Topic quoterResponseTopic = session.createTopic("quoterResponseTopic");
-        Topic quoterRequestTopic = session.createTopic("quoterRequestTopic");
+        Queue clientRequestQueue = session.createQueue(Constants.QUEUE_CLIENT_REQ);
+        Topic clientResponseTopic = session.createTopic(Constants.TOPIC_CLIENT_RES);
+        Topic quoterRequestTopic = session.createTopic(Constants.TOPIC_QUOTER_REQ);
+        Topic quoterResponseTopic = session.createTopic(Constants.TOPIC_QUOTER_RES);
 
         MessageConsumer quoterResponseChannel = session.createConsumer(quoterResponseTopic);
         quoterRequestChannel = session.createProducer(quoterRequestTopic);
