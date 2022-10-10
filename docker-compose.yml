@@ -7,30 +7,44 @@
 #
 version: '3'
 services:
+  activemq:
+    image: rmohr/activemq:latest
+    container_name: activemq
+    ports:
+    # Expose the admin port for convenience
+    - "8161:8161"
+
   broker:
     image: quoco-rmi-broker
-    container_name: quoco-ws-broker
     build:
       args:
         MODULE: broker
+    environment:
+      - MQ=failover://tcp://activemq:61616
 
   auldfellas:
     image: quoco-rmi-auldfellas
     build:
       args:
         MODULE: auldfellas
+    environment:
+      - MQ=failover://tcp://activemq:61616
 
   dodgydrivers:
     image: quoco-rmi-dodgydrivers
     build:
       args:
         MODULE: dodgydrivers
+    environment:
+      - MQ=failover://tcp://activemq:61616
 
   girlpower:
     image: quoco-rmi-girlpower
     build:
       args:
         MODULE: girlpower
+    environment:
+      - MQ=failover://tcp://activemq:61616
 
   client:
     image: quoco-rmi-client
@@ -45,4 +59,4 @@ services:
     entrypoint: "sh"
     command: "-c 'sleep 10 && java -jar /main.jar'"
     environment:
-      - BROKER=http://quoco-ws-broker:9000/quotations
+      - MQ=failover://tcp://activemq:61616

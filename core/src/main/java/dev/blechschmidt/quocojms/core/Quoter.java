@@ -6,7 +6,6 @@ import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
-import javax.jms.Queue;
 import javax.jms.Session;
 import javax.jms.Topic;
 
@@ -23,7 +22,7 @@ public class Quoter {
 
     public Quoter(String[] args, QuotationService service) throws Exception {
         String url = System.getenv("MQ");
-        String id = System.getenv("MQ");
+        String id = System.getenv("ID");
 
         // Prefer CLI args over environment variables
         if (args.length == 2) {
@@ -50,10 +49,10 @@ public class Quoter {
         connection.setClientID(id);
         Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
 
-        Queue queue = session.createQueue(Constants.CHANNEL_QUOTE);
-        Topic topic = session.createTopic(Constants.CHANNEL_APPLICATION);
-        MessageConsumer consumer = session.createConsumer(topic);
-        MessageProducer producer = session.createProducer(queue);
+        Topic requests = session.createTopic("quoterRequestTopic");
+        Topic responses = session.createTopic("quoterResponseTopic");
+        MessageConsumer consumer = session.createConsumer(requests);
+        MessageProducer producer = session.createProducer(responses);
 
         connection.start();
 
@@ -67,7 +66,8 @@ public class Quoter {
                     QuotationRequestMessage request = (QuotationRequestMessage) content;
 
                     Quotation quotation = service.generateQuotation(request.info);
-                    Message response = session.createObjectMessage(new QuotationResponseMessage(request.id, quotation));
+                    Message response = session
+                            .createObjectMessage(new QuotationResponseMessage(request.id, quotation));
                     producer.send(response);
                 }
             } else {
