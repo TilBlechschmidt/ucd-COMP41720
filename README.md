@@ -35,15 +35,15 @@ You can build and run the images manually using the following commands:
 docker network create quoco-jms
 
 # Launch an ActiveMQ server
-docker run --rm --name=activemq -it -p 8161:8161 -p 61616:61616 --platform linux/amd64 rmohr/activemq:latest
+docker run --rm --name=activemq -it -p 8161:8161 -p 61616:61616 --network quoco-jms --platform linux/amd64 rmohr/activemq:latest
 
 # Run these commands in separate terminals
-docker run --rm -it --network quoco-jms -e MQ=failover://tcp://localhost:61616 -e ID=broker quoco-jms-broker
-docker run --rm -it --network quoco-jms -e MQ=failover://tcp://localhost:61616 -e ID=auldfellas quoco-jms-auldfellas
-docker run --rm -it --network quoco-jms -e MQ=failover://tcp://localhost:61616 -e ID=dodgydrivers quoco-jms-dodgydrivers
-docker run --rm -it --network quoco-jms -e MQ=failover://tcp://localhost:61616 -e ID=girlpower quoco-jms-girlpower
+docker run --rm -it --network quoco-jms -e MQ=failover://tcp://activemq:61616 -e ID=broker quoco-jms-broker
+docker run --rm -it --network quoco-jms -e MQ=failover://tcp://activemq:61616 -e ID=auldfellas quoco-jms-auldfellas
+docker run --rm -it --network quoco-jms -e MQ=failover://tcp://activemq:61616 -e ID=dodgydrivers quoco-jms-dodgydrivers
+docker run --rm -it --network quoco-jms -e MQ=failover://tcp://activemq:61616 -e ID=girlpower quoco-jms-girlpower
 
-docker run --rm -it --network quoco-jms -e MQ=failover://tcp://localhost:61616 -e ID=client quoco-jms-client
+docker run --rm -it --network quoco-jms -e MQ=failover://tcp://activemq:61616 -e ID=client quoco-jms-client
 ```
 
 ### Maven
