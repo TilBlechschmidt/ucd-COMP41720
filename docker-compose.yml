@@ -1,0 +1,48 @@
+# Compose file with services for each module
+#
+# It automatically builds the images from the sources, though it WILL NOT rebuild them by default.
+# You have to run docker compose with the --build flag in order for it to rebuild after changes.
+# 
+# NOTE: The client will wait a couple of seconds before querying the service to allow for mDNS to do its magic!
+#
+version: '3'
+services:
+  broker:
+    image: quoco-rmi-broker
+    container_name: quoco-ws-broker
+    build:
+      args:
+        MODULE: broker
+
+  auldfellas:
+    image: quoco-rmi-auldfellas
+    build:
+      args:
+        MODULE: auldfellas
+
+  dodgydrivers:
+    image: quoco-rmi-dodgydrivers
+    build:
+      args:
+        MODULE: dodgydrivers
+
+  girlpower:
+    image: quoco-rmi-girlpower
+    build:
+      args:
+        MODULE: girlpower
+
+  client:
+    image: quoco-rmi-client
+    build:
+      args:
+        MODULE: client
+    depends_on:
+      - broker
+      - auldfellas
+      - dodgydrivers
+      - girlpower
+    entrypoint: "sh"
+    command: "-c 'sleep 10 && java -jar /main.jar'"
+    environment:
+      - BROKER=http://quoco-ws-broker:9000/quotations
