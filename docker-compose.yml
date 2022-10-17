@@ -14,7 +14,7 @@ services:
       args:
         MODULE: broker
     environment:
-      - BROKER_ENDPOINTS=http://quoco-rest-auldfellas:8081/quotations,http://quoco-rest-dodgydrivers:8081/quotations,http://quoco-rest-girlpower:8081/quotations
+      - BROKER_ENDPOINTS=http://quoco-rest-auldfellas:8080/quotations,http://quoco-rest-dodgydrivers:8080/quotations,http://quoco-rest-girlpower:8080/quotations
 
   auldfellas:
     image: quoco-rest-auldfellas
@@ -42,6 +42,7 @@ services:
     build:
       args:
         MODULE: client
+        POSTFIX: -jar-with-dependencies
     depends_on:
       - broker
       - auldfellas
