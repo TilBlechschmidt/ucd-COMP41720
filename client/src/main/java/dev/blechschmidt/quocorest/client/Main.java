@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<ClientInfo> request = new HttpEntity<>(clients[0]);
-        Quotation quotation = restTemplate.postForObject("http://localhost:8080/quotations", request, Quotation.class);
+        Quotation quotation = restTemplate.postForObject("http://localhost:8080/applications", request, Quotation.class);
         displayProfile(clients[0]);
         displayQuotation(quotation);
     }

@@ -1,10 +1,10 @@
 package dev.blechschmidt.quocorest.service;
 
+import org.springframework.web.bind.annotation.RestController;
+
 import dev.blechschmidt.quocorest.core.AbstractQuotationService;
 import dev.blechschmidt.quocorest.core.ClientInfo;
 import dev.blechschmidt.quocorest.core.Quotation;
-
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Implementation of the AuldFellas insurance quotation service.

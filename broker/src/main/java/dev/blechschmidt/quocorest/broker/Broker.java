@@ -2,11 +2,16 @@ package dev.blechschmidt.quocorest.broker;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +23,15 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import dev.blechschmidt.quocorest.core.ClientApplication;
 import dev.blechschmidt.quocorest.core.ClientInfo;
+import dev.blechschmidt.quocorest.core.Quotation;
 
 @RestController
 public class Broker {
     Map<Long, ClientApplication> applications = new HashMap<>();
+    long applicationCounter = 0;
+
+    @Value("${broker.endpoints}")
+    List<URI> endpoints;
 
     @RequestMapping(value = "/applications", method = RequestMethod.POST)
     public ResponseEntity<ClientApplication> createApplication(@RequestBody ClientInfo info) throws URISyntaxException {
@@ -49,8 +59,19 @@ public class Broker {
     }
 
     public ClientApplication collectApplication(ClientInfo info) {
-        ClientApplication application = new ClientApplication();
-        // TODO Request data from the quoters
+        ClientApplication application = new ClientApplication(applicationCounter++, info, new ArrayList<>());
+
+        for (URI quoter : endpoints) {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpEntity<ClientInfo> request = new HttpEntity<>(info);
+            Quotation quotation = restTemplate.postForObject(quoter, request, Quotation.class);
+            if (quotation != null) {
+                application.getQuotations().add(quotation);
+            } else {
+                System.out.println("Received null value from quoter @ " + quoter.toString());
+            }
+        }
+
         return application;
     }
 }

@@ -8,8 +8,6 @@ import java.util.Map;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -23,7 +21,7 @@ public abstract class AbstractQuotationService {
 	private Map<String, Quotation> quotations = new HashMap<>();
 
 	@RequestMapping(value = "/quotations", method = RequestMethod.POST)
-	public ResponseEntity<Quotation> createQuotation(@RequestBody ClientInfo info) throws URISyntaxException {
+	public ResponseEntity<Quotation> createQuotation(ClientInfo info) throws URISyntaxException {
 		Quotation quotation = generateQuotation(info);
 		quotations.put(quotation.getReference(), quotation);
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/quotations/"
@@ -34,7 +32,7 @@ public abstract class AbstractQuotationService {
 	}
 
 	@RequestMapping(value = "/quotations/{reference}", method = RequestMethod.GET)
-	public Quotation getResource(@PathVariable("reference") String reference) {
+	public Quotation getResource(String reference) {
 		Quotation quotation = quotations.get(reference);
 		if (quotation == null)
 			throw new NoSuchQuotationException();
