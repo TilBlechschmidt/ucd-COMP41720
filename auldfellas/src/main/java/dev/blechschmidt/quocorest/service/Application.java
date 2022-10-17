@@ -1,4 +1,4 @@
-package dev.blechschmidt.quocorest;
+package dev.blechschmidt.quocorest.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

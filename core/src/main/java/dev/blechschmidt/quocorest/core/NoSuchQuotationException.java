@@ -1,4 +1,4 @@
-package dev.blechschmidt.quocorest;
+package dev.blechschmidt.quocorest.core;
 
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.http.HttpStatus;

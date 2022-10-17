@@ -1,4 +1,6 @@
-package dev.blechschmidt.quocorest;
+package dev.blechschmidt.quocorest.service;
+
+import org.springframework.web.bind.annotation.RestController;
 
 import dev.blechschmidt.quocorest.core.AbstractQuotationService;
 import dev.blechschmidt.quocorest.core.ClientInfo;
@@ -10,6 +12,7 @@ import dev.blechschmidt.quocorest.core.Quotation;
  * @author Rem
  *
  */
+@RestController
 public class GPQService extends AbstractQuotationService {
 	// All references are to be prefixed with an DD (e.g. DD001000)
 	public static final String PREFIX = "GP";
@@ -24,6 +27,7 @@ public class GPQService extends AbstractQuotationService {
 	 * 100% penalty for > 5 penalty points
 	 * 5% discount per year no claims
 	 */
+	@Override
 	public Quotation generateQuotation(ClientInfo info) {
 		// Create an initial quotation between 600 and 1000
 		double price = generatePrice(600, 400);
