@@ -29,7 +29,7 @@ public class GPQService extends AbstractQuotationService {
 		double price = generatePrice(600, 400);
 
 		// Automatic 50% discount for being female
-		int discount = (info.gender == ClientInfo.FEMALE) ? 50 : 0;
+		int discount = (info.getGender() == ClientInfo.FEMALE) ? 50 : 0;
 
 		// Add a points discount
 		discount += getPointsDiscount(info);
@@ -42,15 +42,15 @@ public class GPQService extends AbstractQuotationService {
 	}
 
 	private int getNoClaimsDiscount(ClientInfo info) {
-		return 5 * info.noClaims;
+		return 5 * info.getNoClaims();
 	}
 
 	private int getPointsDiscount(ClientInfo info) {
-		if (info.points == 0)
+		if (info.getPoints() == 0)
 			return 20;
-		if (info.points < 3)
+		if (info.getPoints() < 3)
 			return 15;
-		if (info.points < 6)
+		if (info.getPoints() < 6)
 			return 0;
 		return -100;
 

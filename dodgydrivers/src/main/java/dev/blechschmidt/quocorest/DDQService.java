@@ -26,7 +26,7 @@ public class DDQService extends AbstractQuotationService {
 		double price = generatePrice(800, 200);
 
 		// 5% discount per penalty point (3 points required for qualification)
-		int discount = (info.points > 3) ? 5 * info.points : -50;
+		int discount = (info.getPoints() > 3) ? 5 * info.getPoints() : -50;
 
 		// Add a no claims discount
 		discount += getNoClaimsDiscount(info);
@@ -36,7 +36,7 @@ public class DDQService extends AbstractQuotationService {
 	}
 
 	private int getNoClaimsDiscount(ClientInfo info) {
-		return 10 * info.noClaims;
+		return 10 * info.getNoClaims();
 	}
 
 }

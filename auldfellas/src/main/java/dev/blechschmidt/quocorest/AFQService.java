@@ -27,10 +27,10 @@ public class AFQService extends AbstractQuotationService {
 		double price = generatePrice(600, 600);
 
 		// Automatic 30% discount for being male
-		int discount = (info.gender == ClientInfo.MALE) ? 30 : 0;
+		int discount = (info.getGender() == ClientInfo.MALE) ? 30 : 0;
 
 		// Automatic 2% discount per year over 60...
-		discount += (info.age > 60) ? (2 * (info.age - 60)) : 0;
+		discount += (info.getAge() > 60) ? (2 * (info.getAge() - 60)) : 0;
 
 		// Add a points discount
 		discount += getPointsDiscount(info);
@@ -40,9 +40,9 @@ public class AFQService extends AbstractQuotationService {
 	}
 
 	private int getPointsDiscount(ClientInfo info) {
-		if (info.points < 3)
+		if (info.getPoints() < 3)
 			return 20;
-		if (info.points <= 6)
+		if (info.getPoints() <= 6)
 			return 0;
 		return -50;
 

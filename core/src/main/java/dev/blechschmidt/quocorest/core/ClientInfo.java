@@ -29,10 +29,59 @@ public class ClientInfo implements Serializable {
 	 * methods is unnecessary as (1) set/get makes the field mutable anyway, and
 	 * (2) set/get introduces additional method calls, which reduces performance.
 	 */
-	public String name;
-	public char gender;
-	public int age;
-	public int points;
-	public int noClaims;
-	public String licenseNumber;
+	private String name;
+	private char gender;
+	private int age;
+	private int points;
+	private int noClaims;
+	private String licenseNumber;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public char getGender() {
+		return gender;
+	}
+
+	public void setGender(char gender) {
+		this.gender = gender;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public int getPoints() {
+		return points;
+	}
+
+	public void setPoints(int points) {
+		this.points = points;
+	}
+
+	public int getNoClaims() {
+		return noClaims;
+	}
+
+	public void setNoClaims(int noClaims) {
+		this.noClaims = noClaims;
+	}
+
+	public String getLicenseNumber() {
+		return licenseNumber;
+	}
+
+	public void setLicenseNumber(String licenseNumber) {
+		this.licenseNumber = licenseNumber;
+	}
+
 }
