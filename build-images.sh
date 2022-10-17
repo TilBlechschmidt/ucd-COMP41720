@@ -3,7 +3,7 @@
 # Useful if you do not intend to use docker compose.
 
 # Common image name prefix
-PREFIX=quoco-ws
+PREFIX=quoco-rest
 
 # Build the quotation services
 docker build -t "$PREFIX"-girlpower --build-arg MODULE=girlpower .

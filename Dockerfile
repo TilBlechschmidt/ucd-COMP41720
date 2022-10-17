@@ -21,5 +21,5 @@ FROM openjdk:8-jre-alpine AS auldfellas
 ARG MODULE
 ARG VERSION=0.0.1
 
-COPY --from=builder /build/$MODULE/target/$MODULE-$VERSION-jar-with-dependencies.jar /main.jar
+COPY --from=builder /build/$MODULE/target/$MODULE-$VERSION.jar /main.jar
 ENTRYPOINT ["/usr/bin/java", "-jar", "/main.jar"]
