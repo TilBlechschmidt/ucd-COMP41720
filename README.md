@@ -21,7 +21,7 @@ If you have a reasonably recent version of Docker installed, you can start all t
 docker compose up --build
 ```
 
-The start of the client has been delayed by a couple of seconds to allow all the other components to start up first. Technically Docker health-checks could have been used but this is the simpler solution for demonstration purposes.
+After all services are healthy (checked through HTTP health probes), the client will be executed.
 
 ### Docker
 
