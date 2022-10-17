@@ -62,13 +62,17 @@ public class Broker {
         ClientApplication application = new ClientApplication(applicationCounter++, info, new ArrayList<>());
 
         for (URI quoter : endpoints) {
-            RestTemplate restTemplate = new RestTemplate();
-            HttpEntity<ClientInfo> request = new HttpEntity<>(info);
-            Quotation quotation = restTemplate.postForObject(quoter, request, Quotation.class);
-            if (quotation != null) {
-                application.getQuotations().add(quotation);
-            } else {
-                System.out.println("Received null value from quoter @ " + quoter.toString());
+            try {
+                RestTemplate restTemplate = new RestTemplate();
+                HttpEntity<ClientInfo> request = new HttpEntity<>(info);
+                Quotation quotation = restTemplate.postForObject(quoter, request, Quotation.class);
+                if (quotation != null) {
+                    application.getQuotations().add(quotation);
+                } else {
+                    System.out.println("Received null value from quoter @ " + quoter.toString());
+                }
+            } catch (Exception e) {
+                new Exception("failed to get quote from " + quoter.toString(), e).printStackTrace();
             }
         }
 
