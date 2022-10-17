@@ -22,7 +22,6 @@ public class AFQService extends AbstractQuotationService {
 	 * 20% discount for less than 3 penalty points
 	 * 50% penalty (i.e. reduction in discount) for more than 60 penalty points
 	 */
-	@Override
 	public Quotation generateQuotation(ClientInfo info) {
 		// Create an initial quotation between 600 and 1200
 		double price = generatePrice(600, 600);

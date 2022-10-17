@@ -21,7 +21,6 @@ public class DDQService extends AbstractQuotationService {
 	 * 50% penalty for <= 3 penalty points
 	 * 10% discount per year no claims
 	 */
-	@Override
 	public Quotation generateQuotation(ClientInfo info) {
 		// Create an initial quotation between 800 and 1000
 		double price = generatePrice(800, 200);

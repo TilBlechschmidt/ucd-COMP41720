@@ -24,7 +24,6 @@ public class GPQService extends AbstractQuotationService {
 	 * 100% penalty for > 5 penalty points
 	 * 5% discount per year no claims
 	 */
-	@Override
 	public Quotation generateQuotation(ClientInfo info) {
 		// Create an initial quotation between 600 and 1000
 		double price = generatePrice(600, 400);
