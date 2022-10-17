@@ -44,11 +44,15 @@ services:
         MODULE: client
         POSTFIX: -jar-with-dependencies
     depends_on:
-      - broker
-      - auldfellas
-      - dodgydrivers
-      - girlpower
-    entrypoint: "sh"
-    command: "-c 'sleep 5 && java -jar /main.jar'"
+      broker:
+        condition: service_healthy
+      auldfellas:
+        condition: service_healthy
+      dodgydrivers:
+        condition: service_healthy
+      girlpower:
+        condition: service_healthy
+    # entrypoint: "sh"
+    # command: "-c 'sleep 5 && java -jar /main.jar'"
     environment:
       - BROKER=http://quoco-rest-broker:8080/applications

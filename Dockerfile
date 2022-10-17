@@ -15,8 +15,12 @@ RUN --mount=type=cache,target=/root/.m2 mvn clean package -Dmaven.test.skip=true
 # --------------------------------- Module image ----------------------------------
 # Copies one of the module JAR files into a OpenJDK-JRE8 image and sets it as the entrypoint.
 # The build argument MODULE should be one of client, broker, auldfellas, girlpower, dodgydrivers.
+# Additionally, a health-check is set up to allow docker compose to 
 
 FROM openjdk:8-jre-alpine AS auldfellas
+
+RUN apk add --no-cache curl
+HEALTHCHECK --interval=2s --timeout=20s CMD curl http://localhost:8080/ || exit 1
 
 ARG MODULE
 ARG VERSION=0.0.1
