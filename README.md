@@ -35,12 +35,12 @@ You can build and run the images manually using the following commands:
 docker network create quoco-rest
 
 # Run these commands in separate terminals
-docker run --rm -it --network quoco-rest --name broker quoco-rest-broker
-docker run --rm -it --network quoco-rest quoco-rest-auldfellas
-docker run --rm -it --network quoco-rest quoco-rest-dodgydrivers
-docker run --rm -it --network quoco-rest quoco-rest-girlpower
+docker run --rm -it --network quoco-rest --name broker -e BROKER_ENDPOINTS=http://auldfellas:8080/quotations,http://dodgydrivers:8080/quotations,http://girlpower:8080/quotations quoco-rest-broker
+docker run --rm -it --network quoco-rest --name auldfellas quoco-rest-auldfellas
+docker run --rm -it --network quoco-rest --name dodgydrivers quoco-rest-dodgydrivers
+docker run --rm -it --network quoco-rest --name girlpower quoco-rest-girlpower
 
-docker run --rm -it --network quoco-rest -e BROKER=http://broker:9000/quotations quoco-rest-client
+docker run --rm -it --network quoco-rest -e BROKER=http://broker:8080/applications quoco-rest-client
 ```
 
 ### Maven
@@ -62,3 +62,7 @@ java -jar dodgydrivers/target/dodgydrivers-0.0.1.jar  --server.port=8083
 # 4. Run the client (in yet another terminal)
 java -jar client/target/client-0.0.1-jar-with-dependencies.jar http://localhost:8080/applications
 ```
+
+## Service degradation
+
+The broker will attempt one request per quoter service for each application. If this request fails, an error will be logged and only the successfully generated quotes will be returned.
