@@ -1,5 +1,20 @@
 package dev.blechschmidt.quocorest;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import dev.blechschmidt.quocorest.core.AbstractQuotationService;
 import dev.blechschmidt.quocorest.core.ClientInfo;
 import dev.blechschmidt.quocorest.core.Quotation;
@@ -10,10 +25,32 @@ import dev.blechschmidt.quocorest.core.Quotation;
  * @author Rem
  *
  */
+@RestController
 public class AFQService extends AbstractQuotationService {
 	// All references are to be prefixed with an AF (e.g. AF001000)
 	public static final String PREFIX = "AF";
 	public static final String COMPANY = "Auld Fellas Ltd.";
+
+	private Map<String, Quotation> quotations = new HashMap<>();
+
+	@RequestMapping(value = "/quotations", method = RequestMethod.POST)
+	public ResponseEntity<Quotation> createQuotation(@RequestBody ClientInfo info) throws URISyntaxException {
+		Quotation quotation = generateQuotation(info);
+		quotations.put(quotation.getReference(), quotation);
+		String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/quotations/"
+				+ quotation.getReference();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(new URI(path));
+		return new ResponseEntity<>(quotation, headers, HttpStatus.CREATED);
+	}
+
+	@RequestMapping(value = "/quotations/{reference}", method = RequestMethod.GET)
+	public Quotation getResource(@PathVariable("reference") String reference) {
+		Quotation quotation = quotations.get(reference);
+		if (quotation == null)
+			throw new NoSuchQuotationException();
+		return quotation;
+	}
 
 	/**
 	 * Quote generation:
