@@ -1,13 +1,14 @@
 package dev.blechschmidt.quocorest.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientApplication {
     private long applicationNumber;
     private ClientInfo info;
-    private List<Quotation> quotations;
+    private ArrayList<Quotation> quotations;
 
-    public ClientApplication(long applicationNumber, ClientInfo info, List<Quotation> quotations) {
+    public ClientApplication(long applicationNumber, ClientInfo info, ArrayList<Quotation> quotations) {
         this.applicationNumber = applicationNumber;
         this.info = info;
         this.quotations = quotations;
@@ -36,7 +37,7 @@ public class ClientApplication {
         return quotations;
     }
 
-    public void setQuotations(List<Quotation> quotations) {
+    public void setQuotations(ArrayList<Quotation> quotations) {
         this.quotations = quotations;
     }
 }
