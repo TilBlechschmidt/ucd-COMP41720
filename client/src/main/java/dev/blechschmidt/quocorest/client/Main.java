@@ -2,6 +2,7 @@ package dev.blechschmidt.quocorest.client;
 
 import java.text.NumberFormat;
 
+import dev.blechschmidt.quocorest.core.ClientApplication;
 import dev.blechschmidt.quocorest.core.ClientInfo;
 import dev.blechschmidt.quocorest.core.Quotation;
 
@@ -10,11 +11,29 @@ import org.springframework.http.HttpEntity;
 
 public class Main {
     public static void main(String[] args) {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<ClientInfo> request = new HttpEntity<>(clients[0]);
-        Quotation quotation = restTemplate.postForObject("http://localhost:8080/applications", request, Quotation.class);
-        displayProfile(clients[0]);
-        displayQuotation(quotation);
+        String broker = System.getenv("BROKER");
+
+        if (args.length == 1) {
+            broker = args[0];
+            System.out.println("Using broker from CLI: " + broker);
+        }
+
+        for (ClientInfo client : clients) {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpEntity<ClientInfo> request = new HttpEntity<>(client);
+            ClientApplication application = restTemplate.postForObject(broker, request,
+                    ClientApplication.class);
+
+            if (application != null) {
+                displayProfile(client);
+                for (Quotation quotation : application.getQuotations()) {
+                    displayQuotation(quotation);
+                }
+            } else {
+                new Exception("Failed to fetch quotations for " + client.getName(), new NullPointerException())
+                        .printStackTrace();
+            }
+        }
     }
 
     /**
