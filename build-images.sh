@@ -12,4 +12,4 @@ docker build -t "$PREFIX"-dodgydrivers --build-arg MODULE=dodgydrivers .
 
 # Build the broker and client
 docker build -t "$PREFIX"-broker --build-arg MODULE=broker .
-docker build -t "$PREFIX"-client --build-arg MODULE=client .
+docker build -t "$PREFIX"-client --build-arg MODULE=client --build-arg POSTFIX=-jar-with-dependencies .

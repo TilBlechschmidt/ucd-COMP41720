@@ -52,7 +52,5 @@ services:
         condition: service_healthy
       girlpower:
         condition: service_healthy
-    # entrypoint: "sh"
-    # command: "-c 'sleep 5 && java -jar /main.jar'"
     environment:
       - BROKER=http://quoco-rest-broker:8080/applications
