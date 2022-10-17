@@ -2,6 +2,7 @@ package dev.blechschmidt.quocorest.broker;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +26,8 @@ public class Broker {
     @RequestMapping(value = "/applications", method = RequestMethod.POST)
     public ResponseEntity<ClientApplication> createApplication(@RequestBody ClientInfo info) throws URISyntaxException {
         ClientApplication application = collectApplication(info);
+        applications.put(application.getApplicationNumber(), application);
+
         String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/applications/"
                 + application.getApplicationNumber();
         HttpHeaders headers = new HttpHeaders();
@@ -32,12 +35,17 @@ public class Broker {
         return new ResponseEntity<>(application, headers, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/applications/{reference}", method = RequestMethod.GET)
-    public ClientApplication getResource(@PathVariable("reference") long reference) {
+    @RequestMapping(value = "/applications/{applicationNumber}", method = RequestMethod.GET)
+    public ClientApplication getResource(@PathVariable("applicationNumber") long reference) {
         ClientApplication application = applications.get(reference);
         if (application == null)
             throw new NoSuchApplicationException();
         return application;
+    }
+
+    @RequestMapping(value = "/applications", method = RequestMethod.GET)
+    public Collection<ClientApplication> getResources() {
+        return applications.values();
     }
 
     public ClientApplication collectApplication(ClientInfo info) {
