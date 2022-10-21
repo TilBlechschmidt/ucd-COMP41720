@@ -2,7 +2,7 @@ package dev.blechschmidt.quocoactor.service.messages;
 
 import dev.blechschmidt.quocoactor.core.ClientInfo;
 
-public class QuotationRequest {
+public class QuotationRequest implements CustomSerializable {
     private int id;
     private ClientInfo clientInfo;
 

@@ -14,11 +14,14 @@
     </properties>
 
     <dependencies>
+        <!-- AKKA Main dependency -->
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-actor_2.12</artifactId>
             <version>${akka.version}</version>
         </dependency>
+
+        <!-- Actor testing dependencies -->
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-testkit_2.12</artifactId>
