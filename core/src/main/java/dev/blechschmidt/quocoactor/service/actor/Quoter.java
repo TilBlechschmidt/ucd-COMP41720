@@ -3,7 +3,7 @@ package dev.blechschmidt.quocoactor.service.actor;
 import akka.actor.AbstractActor;
 import dev.blechschmidt.quocoactor.core.Quotation;
 import dev.blechschmidt.quocoactor.core.QuotationService;
-import dev.blechschmidt.quocoactor.service.messages.Init;
+import dev.blechschmidt.quocoactor.service.messages.QuoterInit;
 import dev.blechschmidt.quocoactor.service.messages.QuotationRequest;
 import dev.blechschmidt.quocoactor.service.messages.QuotationResponse;
 
@@ -19,7 +19,7 @@ public class Quoter extends AbstractActor {
                             getSender().tell(
                                     new QuotationResponse(msg.getId(), quotation), getSelf());
                         })
-                .match(Init.class,
+                .match(QuoterInit.class,
                         msg -> {
                             service = msg.getQuotationService();
                         })

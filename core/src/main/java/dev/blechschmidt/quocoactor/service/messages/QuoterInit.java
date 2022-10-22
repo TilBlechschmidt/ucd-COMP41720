@@ -2,14 +2,14 @@ package dev.blechschmidt.quocoactor.service.messages;
 
 import dev.blechschmidt.quocoactor.core.QuotationService;
 
-public class Init {
+public class QuoterInit {
     private QuotationService quotationService;
 
-    public Init(QuotationService quotationService) {
+    public QuoterInit(QuotationService quotationService) {
         this.quotationService = quotationService;
     }
 
-    public Init() {
+    public QuoterInit() {
     }
 
     public QuotationService getQuotationService() {

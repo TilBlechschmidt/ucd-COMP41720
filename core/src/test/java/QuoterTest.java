@@ -6,7 +6,7 @@ import dev.blechschmidt.quocoactor.core.ClientInfo;
 import dev.blechschmidt.quocoactor.core.Quotation;
 import dev.blechschmidt.quocoactor.core.QuotationService;
 import dev.blechschmidt.quocoactor.service.actor.Quoter;
-import dev.blechschmidt.quocoactor.service.messages.Init;
+import dev.blechschmidt.quocoactor.service.messages.QuoterInit;
 import dev.blechschmidt.quocoactor.service.messages.QuotationRequest;
 import dev.blechschmidt.quocoactor.service.messages.QuotationResponse;
 import akka.actor.ActorRef;
@@ -38,7 +38,7 @@ public class QuoterTest {
     public void testQuoter() {
         ActorRef quoterRef = system.actorOf(Props.create(Quoter.class), "test");
         TestKit probe = new TestKit(system);
-        quoterRef.tell(new Init(new TQService()), null);
+        quoterRef.tell(new QuoterInit(new TQService()), null);
         quoterRef.tell(new QuotationRequest(1,
                 new ClientInfo("Niki Collier", ClientInfo.FEMALE, 43, 0, 5, "PQR254/1")),
                 probe.getRef());
