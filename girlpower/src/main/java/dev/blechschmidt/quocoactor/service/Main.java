@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         ActorSystem system = ActorSystem.create();
 
-        ActorRef ref = system.actorOf(Props.create(Quoter.class), "auldfellas");
+        ActorRef ref = system.actorOf(Props.create(Quoter.class), "girlpower");
         ref.tell(new QuoterInit(new GPQService()), null);
 
         ActorSelection selection = system.actorSelection("akka.tcp://default@127.0.0.1:2551/user/broker");
