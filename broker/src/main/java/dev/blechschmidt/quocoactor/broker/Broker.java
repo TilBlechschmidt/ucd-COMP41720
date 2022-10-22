@@ -19,7 +19,7 @@ import scala.concurrent.duration.Duration;
 import scala.concurrent.duration.FiniteDuration;
 
 public class Broker extends AbstractActor {
-    private static final FiniteDuration DEADLINE = Duration.create(2, TimeUnit.SECONDS);
+    private static final FiniteDuration DEADLINE = Duration.create(1, TimeUnit.SECONDS);
 
     // Just in case, we make the collections synchronised — no idea if Akka
     // dispatches the match blocks on the same thread.
@@ -42,16 +42,19 @@ public class Broker extends AbstractActor {
                 .match(QuotationRequest.class,
                         msg -> {
                             int clientId = requestQuotes(msg);
+                            System.out.println("Received request #" + msg.getId() + " (cid=" + clientId + ")");
                             scheduleDeadline(clientId);
                         })
                 .match(QuotationResponse.class,
                         msg -> {
+                            System.out.println("Received response for cid #" + msg.getId());
                             Client client = clients.get(msg.getId());
                             if (client != null)
                                 client.add(msg.getQuotation());
                         })
                 .match(RequestDeadline.class,
                         msg -> {
+                            System.out.println("Deadline expired for cid #" + msg.clientKey);
                             Client client = clients.get(msg.clientKey);
 
                             if (client != null)
@@ -74,7 +77,7 @@ public class Broker extends AbstractActor {
 
     void scheduleDeadline(int clientId) {
         getContext().system().scheduler().scheduleOnce(DEADLINE,
-                getSelf(), new RequestDeadline(clientCounter++),
+                getSelf(), new RequestDeadline(clientCounter),
                 getContext().dispatcher(),
                 null);
     }
