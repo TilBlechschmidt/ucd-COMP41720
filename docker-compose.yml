@@ -1,0 +1,48 @@
+# Compose file with services for each module
+#
+# It automatically builds the images from the sources, though it WILL NOT rebuild them by default.
+# You have to run docker compose with the --build flag in order for it to rebuild after changes.
+# 
+# NOTE: The client will wait a couple of seconds before querying the service to allow for the other services to be alive!
+#
+version: '3'
+services:
+  broker:
+    image: quoco-actor
+    build: {}
+    container_name: quoco-actor-broker
+    command: "broker"
+
+  auldfellas:
+    image: quoco-actor
+    build: {}
+    command: "auldfellas"
+    environment:
+      - BROKER=quoco-actor-broker:2551
+
+  dodgydrivers:
+    image: quoco-actor
+    build: {}
+    command: "dodgydrivers"
+    environment:
+      - BROKER=quoco-actor-broker:2551
+
+  girlpower:
+    image: quoco-actor
+    build: {}
+    command: "girlpower"
+    environment:
+      - BROKER=quoco-actor-broker:2551
+
+  client:
+    image: quoco-actor
+    build: {}
+    depends_on:
+      - broker
+      - auldfellas
+      - dodgydrivers
+      - girlpower
+    entrypoint: "sh"
+    command: "-c 'sleep 10 && mvn exec:java -pl client'"
+    environment:
+      - BROKER=quoco-actor-broker:2551

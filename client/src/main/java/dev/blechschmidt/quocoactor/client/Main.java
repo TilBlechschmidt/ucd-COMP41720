@@ -24,7 +24,7 @@ public class Main {
         ActorSystem system = ActorSystem.create();
 
         ActorRef client = system.actorOf(Props.create(Client.class), "client");
-        ActorSelection broker = system.actorSelection("akka.tcp://default@127.0.0.1:2551/user/broker");
+        ActorSelection broker = findBroker(args, system);
 
         // Notify the client to expect a response and send the request to the broker
         //
@@ -39,5 +39,15 @@ public class Main {
 
         Thread.sleep(2000);
         System.exit(0);
+    }
+
+    private static ActorSelection findBroker(String[] args, ActorSystem system) {
+        String brokerHost = System.getenv("BROKER");
+
+        if (args.length == 1) {
+            brokerHost = args[0];
+        }
+
+        return system.actorSelection("akka.tcp://default@" + brokerHost + "/user/broker");
     }
 }
